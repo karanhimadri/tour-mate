@@ -1,10 +1,9 @@
-import React from 'react'
-import Homepage from './pages/Homepage'
+import Authpage from './pages/Authpage'
 
 const App = () => {
   return (
     <div>
-      <Homepage/>
+      <Authpage/>
     </div>
   )
 }
