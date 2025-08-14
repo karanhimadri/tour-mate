@@ -48,22 +48,22 @@ const MountainView = [
     },
     hosted_by: "Isha",
     uniqueness: [
-      "Mountain View", "Family Friendly", "Eco-Friendly","Surrounded by Nature"
+      "Mountain View", "Family Friendly", "Eco-Friendly","Surrounded by Nature","Adventure Base"
     ],
     about: "Blue Magpie Homestay is a serene, family-run retreat nestled in the Middle of Himalayas, in the village of Satkhol near Mukteshwar, Uttarakhand. Surrounded by fruit orchards and organic fields, this homestay offers a holistic experience, perfect for nature lovers, work-from-home travelers, and those looking to unwind. It is ideal for guests seeking to live like locals and immerse themselves in the simple, authentic mountain lifestyle , not for those looking for luxury amenities or services.",
-    offers: ["Wifi","TV","Kitchen", "Free Parking On Premises", "Garden/Lawn View"],
-    actual_price: 7317,          // ₹7,317 as per screenshot
-    discounted_price: 5292,
+    offers: ["Wifi","TV","Kitchen", "Free Parking On Premises", "Washing Machine", "Fire Extinguisher"],
+    actual_price: 7645,
+    discounted_price: 5529,
     ratings: 5,
     reviews: ["Exceptional service", "Authentic local living"],
-    total_reviews: 1,
+    total_reviews: 10,
     likes: 6,
     shares: 2,
-    cancelation_policy: "Flexible cancellation until 7 days before check-in for a full refund.",
+    cancelation_policy: "Guests must cancel at least 5 days before check-in for a full refund. Cancellations within 5 days or no shows will be non refundable.",
     hot_price: true
   },
   {
-    title: "Himalayan Dream Cove by the River",
+    title: "Himalayan Dream Cove by the River Cottage - Cozy 6 Huts in Manali| River View",
     location: "Manali, Himachal Pradesh, India",
     images: [
       "https://homeyhuts-prod-assets.s3.ap-south-1.amazonaws.com/1431/image_if8db_2_12_2025_6%3A50%3A27_AM_656_450.webp",
@@ -81,7 +81,7 @@ const MountainView = [
     },
     hosted_by: "Siddhi",
     uniqueness: [
-      "Mountain View", "Riverfront", "Photography-Friendly", "Snow Views", "Adventure Base", "Family Friendly"
+      "Mountain View", "Surrounded by Nature", "Photography-Friendly", "Snow Views", "Adventure Base", "Family Friendly"
     ],
     about: "Nestled in the serene landscapes of Manali, Himalayan Dream Cove by the river Cottage offers a peaceful retreat in charming huts surrounded by mesmerizing views of mountains, rivers, and lush valleys. Designed to provide an escape from the chaos of daily life, this cozy property is perfect for couples, small families, and groups seeking relaxation amidst nature’s tranquility.",
     offers: ["Wifi", "Free Parking On Premises", "Kitchen", "Heating","Fire Extinguisher", "Mountain View"],
@@ -91,8 +91,8 @@ const MountainView = [
     reviews: ["Scenic and peaceful", "Spacious and comfortable"],
     total_reviews: 9,
     likes: 6,
-    shares: 9,
-    cancelation_policy: "Cancellation allowed before 14 days for full refund.",
+    shares: 8,
+    cancelation_policy: "Guests must cancel at least 5 days before check-in for a full refund. Cancellations within 5 days or no shows will be non refundable.",
     hot_price: true
   },
   {
@@ -112,7 +112,7 @@ const MountainView = [
     },
     hosted_by: " Isha",
     uniqueness: [
-      "Beach House", "Eco-Friendly", "Ocean Front", "Surrounded by Nature"
+      "Adventure Base", "Eco-Friendly", "Ocean Front", "Surrounded by Nature"
     ],
     about: "Welcome to Your Serene Surfside Escape – A Hidden Gem Near Beleswar Beachh\nThis isn’t just a place to crash — it’s where the surf community comes together in Puri. Run by surfers who live for the ocean, our place is made for people who’d rather spend sunrise in the water than in bed.\n\nWe’ve got a surf school right on site, with boards, lessons, and everything you need whether you're just starting out or chasing your next big wave. The beach is right there, 15 min walk through a mesmerising walking trail.\n\nwhen the sea is calm, we take to the nearby river with paddles and kayaks. It’s all about staying close to the water.",
     offers: ["Wifi", "AC", "Free Parking On Premises", "Beach Access", "Washing Machine", "Fire Extinguisher"],
@@ -123,7 +123,7 @@ const MountainView = [
     total_reviews: 10,
     likes: 4,
     shares: 2,
-    cancelation_policy: "Full refund for cancellations up to 5 days before check-in.",
+    cancelation_policy: "Guests must cancel at least 5 days before check-in for a full refund. Cancellations within 5 days or no shows will be non refundable.",
     hot_price: true
   },
    {
@@ -158,7 +158,7 @@ const MountainView = [
     hot_price: true
   },
   {
-    title: "Nature's Paradise Tirthan: The Pahadi Home",
+    title: "Nature's Paradise Tirthan: The Pahadi Ghar 2BR Private room",
     location: "Gushaini, Himachal Pradesh, India",
     images: [
       "https://homeyhuts-prod-assets.s3.ap-south-1.amazonaws.com/1476/image_h9yhwh_1_23_2025_9%3A36%3A24_AM_656_450.webp",
@@ -178,15 +178,15 @@ const MountainView = [
       "Lake Front", "Mountain View", "Peaceful Retreat", "Yoga/Meditation", "Family Friendly", "Countryside Views"
     ],
 about: "Welcome to Nature's Paradise Tirthan - The Pahadi Ghar.\n\nNestled amidst the serene landscapes of Shairopa, Himachal Pradesh, The Pahadi Ghar is a charming homestay offering a peaceful escape into the lap of nature. This modern yet cozy property features 2 beautifully designed bedrooms and 2 bathrooms, making it perfect for families, groups of friends, and nature lovers looking to rejuvenate.",
-    offers: ["Wifi", "Kitchen", "Fire Extinguisher", "First Aid Kitden View", "Balcony View"],
+    offers: ["Wifi", "Kitchen", "Fire Extinguisher", "First Aid Kit", "Garden View"],
     actual_price: 5853.6,
     discounted_price: 4233.6,
     ratings: 5,
     reviews: ["Warm hospitality", "Great mountain views"],
-    total_reviews: 5,
+    total_reviews: 6,
     likes: 3,
     shares: 5,
-    cancelation_policy: "Free cancellation before 7 days of check-in.",
+    cancelation_policy: "Guests must cancel at least 5 days before check-in for a full refund. Cancellations within 5 days or no shows will be non refundable.",
     hot_price: true
   },
   {
@@ -216,18 +216,18 @@ about: `Important Information (must read)
 
 • 300-meter walk/mild trek from parking to the cottage (luggage assistance provided).`,
     offers: ["Wifi", "Mountain View", "Garden View","Fire Extinguisher","First Aid Kit","TV"],
-    actual_price: 8780.4,
-    discounted_price: 6350.4,
+    actual_price: 6472.4,
+    discounted_price: 6127.54,
     ratings: 4.8,
     reviews: ["Beautiful stonework", "Calm and relaxing stay"],
-    total_reviews: 4,
+    total_reviews: 5,
     likes: 5,
     shares: 4,
-    cancelation_policy: "Full refund if cancelled before 14 days of check-in.",
+    cancelation_policy: "Guests must cancel at least 5 days before check-in for a full refund. Cancellations within 5 days or no shows will be non refundable.",
     hot_price: true
   },
   {
-    title: "RiverSoul Cottage | 2BR with attic bed",
+    title: "RiverSoul Cottage | 2BR with attic bed |Riverside Wooden Cottage|Tirthan Valley",
     location: "Mashyar, Himachal Pradesh, India",
     images: [
       "https://homeyhuts-prod-assets.s3.ap-south-1.amazonaws.com/1516/image_vw302_2_5_2025_10%3A17%3A27_AM.webp",
@@ -238,7 +238,7 @@ about: `Important Information (must read)
     homastay_capacity: {
       guests: 12,
       bedrooms: 2,
-      beds: 3,
+      beds: 2,
       bathrooms: 2
     },
     hosted_by: "Sreenandh",
@@ -247,9 +247,9 @@ about: `Important Information (must read)
     ],
     about: "Perched in the heart of the scenic Falachan Valley near Tirthan, RiverSoul Cottage is a serene riverside retreat offering breathtaking mountain views and the soothing sound of the river. Designed with traditional wooden architecture, this cozy 2-bedroom attic-style cottage is perfect for groups, families, couples, and nature lovers looking to escape into Peaceful stay.",
     offers: ["First Aid Kit", "Kitchen", "Free Parking On Premises", "River Front", "Fire Extinguisher", "Mountain View"],
-    actual_price: 6834.56,
-    discounted_price: 4942.56,
-    ratings: 5,
+    actual_price: 7141.32,
+    discounted_price: 5164.32,
+    ratings: 6,
     reviews: ["Amazing river views", "Spacious rooms"],
     total_reviews: 20,
     likes: 10,
