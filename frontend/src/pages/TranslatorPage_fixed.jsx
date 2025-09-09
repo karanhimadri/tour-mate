@@ -677,5 +677,3 @@ const TranslatorPage = () => {
 };
 
 export default TranslatorPage;
-
-

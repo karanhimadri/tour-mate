@@ -9,6 +9,7 @@ import {
     FaMoon,
     FaNewspaper,
     FaRobot,
+    FaSignInAlt,
     FaSun,
     FaUserFriends
 } from 'react-icons/fa';
@@ -27,6 +28,7 @@ const Sidebar = () => {
     { path: '/emergency', name: 'Emergency', icon: <FaExclamationTriangle size={20} /> },
     { path: '/cultural-feed', name: 'Cultural Feed', icon: <FaNewspaper size={20} /> },
     { path: '/chatbot', name: 'Chatbot', icon: <FaRobot size={20} /> },
+    { path: '/auth', name: 'Sign In', icon: <FaSignInAlt size={20} /> },
   ];
 
   const toggleDarkMode = () => {

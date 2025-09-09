@@ -1,31 +1,8 @@
 import { motion } from 'framer-motion';
-import { FaBookmark, FaClock, FaStar } from 'react-icons/fa';
+import { FaBookmark, FaClock, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
+import { experiences } from '../data';
 
 const ExperiencesPage = () => {
-  const experiences = [
-    {
-      id: 1,
-      title: 'Traditional Pottery Workshop',
-      host: 'Maya Sharma',
-      duration: '2 hours',
-      rating: 4.9,
-      price: 30,
-      image: 'https://source.unsplash.com/random/400x300?pottery',
-      category: 'Arts & Crafts',
-    },
-    {
-      id: 2,
-      title: 'Village Cooking Class',
-      host: 'Raj Kumar',
-      duration: '3 hours',
-      rating: 4.8,
-      price: 45,
-      image: 'https://source.unsplash.com/random/400x300?cooking',
-      category: 'Culinary',
-    },
-    // Add more experiences here
-  ];
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -33,7 +10,7 @@ const ExperiencesPage = () => {
       className="max-w-7xl mx-auto"
     >
       <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">
-        Local Experiences
+        Authentic Local Experiences
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,29 +30,59 @@ const ExperiencesPage = () => {
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                   {experience.title}
                 </h3>
-                <button className="text-gray-400 hover:text-yellow-500">
+                <button className="text-gray-400 hover:text-red-500 transition-colors">
                   <FaBookmark />
                 </button>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Hosted by {experience.host}
+              
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 mb-2">
+                <FaMapMarkerAlt className="text-indigo-600" />
+                <span className="text-sm">{experience.location}</span>
+              </div>
+              
+              <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+                {experience.description}
               </p>
-              <div className="flex items-center gap-4 mb-4">
-                <span className="flex items-center gap-1 text-gray-600 dark:text-gray-300">
-                  <FaClock /> {experience.duration}
-                </span>
-                <span className="flex items-center gap-1 text-yellow-500">
-                  <FaStar /> {experience.rating}
-                </span>
+              
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <FaClock className="text-gray-400" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {experience.duration}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FaStar className="text-yellow-500" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {experience.rating}
+                  </span>
+                </div>
               </div>
+              
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
-                  ${experience.price}
-                </span>
-                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
-                  Book Now
-                </button>
+                <div>
+                  <span className="text-sm text-gray-500">Hosted by</span>
+                  <p className="font-medium text-gray-800 dark:text-white">
+                    {experience.host}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-indigo-600">
+                    ₹{experience.price}
+                  </span>
+                  <p className="text-sm text-gray-500">per person</p>
+                </div>
               </div>
+              
+              <div className="mt-4">
+                <span className="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-3 py-1 rounded-full text-sm">
+                  {experience.category}
+                </span>
+              </div>
+              
+              <button className="w-full mt-4 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                Book Experience
+              </button>
             </div>
           </motion.div>
         ))}

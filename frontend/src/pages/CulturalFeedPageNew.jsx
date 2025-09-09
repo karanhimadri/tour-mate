@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
     FaBookmark,
     FaCalendarAlt,
-    FaChartLine,
     FaComment,
     FaEye,
     FaFire,
@@ -11,7 +10,6 @@ import {
     FaHeart,
     FaHistory,
     FaLanguage,
-    FaMapMarkerAlt,
     FaMusic,
     FaPalette,
     FaPause,
@@ -20,6 +18,7 @@ import {
     FaShare,
     FaStar,
     FaTheaterMasks,
+    FaTrendingUp,
     FaUtensils,
     FaVideo
 } from 'react-icons/fa';
@@ -31,8 +30,6 @@ const CulturalFeedPage = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPost, setSelectedPost] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [nearbyStories, setNearbyStories] = useState([]);
   const [userPreferences, setUserPreferences] = useState({
     categories: ['food', 'art', 'music', 'tradition'],
     location: 'India',
@@ -45,8 +42,6 @@ const CulturalFeedPage = () => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // grid, list, magazine
   const [sortBy, setSortBy] = useState('recent'); // recent, popular, trending
-  const [showFullStory, setShowFullStory] = useState(false);
-  const [isReading, setIsReading] = useState(false);
   const audioRef = useRef(null);
 
   const categories = [
@@ -72,86 +67,18 @@ const CulturalFeedPage = () => {
     readTime: `${Math.floor(Math.random() * 8) + 2} min`,
     difficulty: ['Beginner', 'Intermediate', 'Advanced'][Math.floor(Math.random() * 3)],
     trending: Math.random() > 0.7,
-    authorAvatar: ['👨‍🍳', '👩‍🎨', '🎭', '🎵', '📖', '🌟'][Math.floor(Math.random() * 6)],
-    location: {
-      city: ['Kolkata', 'Delhi', 'Mumbai', 'Chennai', 'Bangalore', 'Jaipur'][Math.floor(Math.random() * 6)],
-      state: ['West Bengal', 'Delhi', 'Maharashtra', 'Tamil Nadu', 'Karnataka', 'Rajasthan'][Math.floor(Math.random() * 6)],
-      latitude: 22.5726 + (Math.random() - 0.5) * 10,
-      longitude: 88.3639 + (Math.random() - 0.5) * 10
-    },
-    fullStory: `This is the complete story of ${post.title}. ${post.content} 
-
-    The cultural significance of this tradition dates back centuries, when local communities first began practicing these customs. Each element has deep meaning rooted in the local history and beliefs of the region.
-
-    Local artisans and practitioners have passed down these traditions through generations, ensuring that the authentic methods and meanings are preserved. Today, we see a beautiful blend of traditional practices with modern interpretations.
-
-    The community impact of these cultural practices extends beyond mere tradition - they provide livelihood, identity, and continuity for local populations. Visitors can experience these traditions firsthand by participating in local workshops and cultural exchanges.
-
-    For travelers, understanding these cultural nuances enriches the travel experience and creates meaningful connections with local communities. It's not just about observing - it's about respectful participation and cultural exchange.`,
-    nearbyAttractions: [
-      'Local Cultural Center',
-      'Traditional Market',
-      'Heritage Museum',
-      'Community Workshop'
-    ]
+    authorAvatar: ['👨‍🍳', '👩‍🎨', '🎭', '🎵', '📖', '🌟'][Math.floor(Math.random() * 6)]
   }));
 
   useEffect(() => {
     setPosts(enhancedPosts);
     setFilteredPosts(enhancedPosts);
     loadUserPreferences();
-    getCurrentLocation();
   }, []);
 
   useEffect(() => {
     filterPosts();
-  }, [activeFilter, searchQuery, posts, sortBy, userLocation]);
-
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const location = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy
-          };
-          setUserLocation(location);
-          findNearbyStories(location);
-        },
-        (error) => {
-          console.error('Location error:', error);
-          // Default to Kolkata coordinates
-          const defaultLocation = { latitude: 22.5726, longitude: 88.3639 };
-          setUserLocation(defaultLocation);
-          findNearbyStories(defaultLocation);
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
-      );
-    }
-  };
-
-  const findNearbyStories = (userLoc) => {
-    const nearby = posts.filter(post => {
-      const distance = calculateDistance(
-        userLoc.latitude, userLoc.longitude,
-        post.location?.latitude || 22.5726, post.location?.longitude || 88.3639
-      );
-      return distance <= 50; // Within 50km
-    });
-    setNearbyStories(nearby.slice(0, 5));
-  };
-
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c; // Distance in km
-  };
+  }, [activeFilter, searchQuery, posts, sortBy]);
 
   const loadUserPreferences = () => {
     const saved = localStorage.getItem('culturalFeedPreferences');
@@ -182,40 +109,23 @@ const CulturalFeedPage = () => {
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.location?.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.location?.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
-    // Prioritize nearby stories if location is available
-    if (userLocation && sortBy === 'nearby') {
-      filtered.sort((a, b) => {
-        const distanceA = calculateDistance(
-          userLocation.latitude, userLocation.longitude,
-          a.location?.latitude || 22.5726, a.location?.longitude || 88.3639
-        );
-        const distanceB = calculateDistance(
-          userLocation.latitude, userLocation.longitude,
-          b.location?.latitude || 22.5726, b.location?.longitude || 88.3639
-        );
-        return distanceA - distanceB;
-      });
-    } else {
-      // Sort posts
-      filtered.sort((a, b) => {
-        switch (sortBy) {
-          case 'popular':
-            return b.likes - a.likes;
-          case 'trending':
-            return b.trending ? 1 : -1;
-          case 'views':
-            return b.views - a.views;
-          default: // recent
-            return new Date(b.date) - new Date(a.date);
-        }
-      });
-    }
+    // Sort posts
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'popular':
+          return b.likes - a.likes;
+        case 'trending':
+          return b.trending ? 1 : -1;
+        case 'views':
+          return b.views - a.views;
+        default: // recent
+          return new Date(b.date) - new Date(a.date);
+      }
+    });
 
     setFilteredPosts(filtered);
   };
@@ -280,41 +190,6 @@ const CulturalFeedPage = () => {
       setIsPlaying(false);
       setCurrentAudio(null);
     };
-  };
-
-  const readStoryAloud = (text) => {
-    if ('speechSynthesis' in window) {
-      // Stop any current reading
-      window.speechSynthesis.cancel();
-      
-      if (isReading) {
-        setIsReading(false);
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      utterance.onstart = () => setIsReading(true);
-      utterance.onend = () => setIsReading(false);
-      utterance.onerror = () => setIsReading(false);
-
-      window.speechSynthesis.speak(utterance);
-    } else {
-      showNotification('Text-to-speech not supported in this browser', 'warning');
-    }
-  };
-
-  const openFullStory = (post) => {
-    console.log('Opening story:', post.title);
-    setSelectedPost(post);
-    setShowFullStory(true);
-    // Track view
-    setPosts(prev => prev.map(p => 
-      p.id === post.id ? { ...p, views: p.views + 1 } : p
-    ));
   };
 
   const showNotification = (message, type = 'info') => {
@@ -410,7 +285,6 @@ const CulturalFeedPage = () => {
               <option value="popular">Most Popular</option>
               <option value="trending">Trending</option>
               <option value="views">Most Viewed</option>
-              <option value="nearby">Nearby Stories</option>
             </select>
           </div>
 
@@ -447,8 +321,7 @@ const CulturalFeedPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              onClick={() => openFullStory(post)}
-              className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden group hover:shadow-3xl transition-all duration-500 cursor-pointer ${
+              className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden group hover:shadow-3xl transition-all duration-500 ${
                 viewMode === 'magazine' ? 'lg:flex lg:items-center' : ''
               }`}
               whileHover={{ y: -5 }}
@@ -481,20 +354,14 @@ const CulturalFeedPage = () => {
                 <div className="absolute bottom-4 right-4 flex gap-2">
                   {post.audio && (
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        playAudio(post.audio, post.id);
-                      }}
+                      onClick={() => playAudio(post.audio, post.id)}
                       className="bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-all duration-300"
                     >
                       {currentAudio === post.id && isPlaying ? <FaPause /> : <FaPlay />}
                     </button>
                   )}
                   {post.video && (
-                    <button 
-                      onClick={(e) => e.stopPropagation()}
-                      className="bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-all duration-300"
-                    >
+                    <button className="bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-all duration-300">
                       <FaVideo />
                     </button>
                   )}
@@ -539,20 +406,6 @@ const CulturalFeedPage = () => {
                   {post.content}
                 </p>
 
-                {/* Location Info */}
-                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
-                  <FaMapMarkerAlt className="text-xs" />
-                  <span>{post.location?.city}, {post.location?.state}</span>
-                  {userLocation && (
-                    <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
-                      {calculateDistance(
-                        userLocation.latitude, userLocation.longitude,
-                        post.location?.latitude || 22.5726, post.location?.longitude || 88.3639
-                      ).toFixed(1)} km away
-                    </span>
-                  )}
-                </div>
-
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags?.slice(0, 3).map((tag, index) => (
@@ -573,7 +426,7 @@ const CulturalFeedPage = () => {
                       {post.views?.toLocaleString()}
                     </span>
                     <span className="flex items-center gap-1">
-                      <FaChartLine />
+                      <FaTrendingUp />
                       {getPostStats(post).engagement}%
                     </span>
                   </div>
@@ -583,10 +436,7 @@ const CulturalFeedPage = () => {
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLike(post.id);
-                      }}
+                      onClick={() => handleLike(post.id)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 ${
                         likedPosts.includes(post.id)
                           ? 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300'
@@ -598,10 +448,7 @@ const CulturalFeedPage = () => {
                     </button>
                     
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPost(post);
-                      }}
+                      onClick={() => setSelectedPost(post)}
                       className="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-300"
                     >
                       <FaComment />
@@ -611,10 +458,7 @@ const CulturalFeedPage = () => {
 
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleBookmark(post.id);
-                      }}
+                      onClick={() => handleBookmark(post.id)}
                       className={`p-2 rounded-lg transition-all duration-300 ${
                         bookmarkedPosts.includes(post.id)
                           ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300'
@@ -625,10 +469,7 @@ const CulturalFeedPage = () => {
                     </button>
                     
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShare(post);
-                      }}
+                      onClick={() => handleShare(post)}
                       className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-300"
                     >
                       <FaShare />
@@ -676,7 +517,7 @@ const CulturalFeedPage = () => {
         )}
       </div>
 
-      {/* Full Story Modal */}
+      {/* Post Detail Modal */}
       <AnimatePresence>
         {selectedPost && (
           <motion.div
@@ -694,37 +535,15 @@ const CulturalFeedPage = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {selectedPost.title}
-                  </h2>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center gap-1">
-                      <FaMapMarkerAlt />
-                      {selectedPost.location?.city}, {selectedPost.location?.state}
-                    </span>
-                    <span>By {selectedPost.author}</span>
-                    <span>{selectedPost.readTime}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => readStoryAloud(selectedPost.fullStory)}
-                    className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                      isReading 
-                        ? 'bg-red-600 text-white' 
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }`}
-                  >
-                    {isReading ? 'Stop Reading' : 'Read Aloud'}
-                  </button>
-                  <button
-                    onClick={() => setSelectedPost(null)}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
-                  >
-                    ×
-                  </button>
-                </div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {selectedPost.title}
+                </h2>
+                <button
+                  onClick={() => setSelectedPost(null)}
+                  className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
+                >
+                  ×
+                </button>
               </div>
               
               <img
@@ -734,50 +553,15 @@ const CulturalFeedPage = () => {
               />
               
               <div className="prose dark:prose-invert max-w-none">
-                <div className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                  {selectedPost.fullStory}
-                </div>
-                
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                    <h4 className="font-bold mb-3 text-blue-800 dark:text-blue-300">Nearby Attractions</h4>
-                    <ul className="space-y-2">
-                      {selectedPost.nearbyAttractions?.map((attraction, index) => (
-                        <li key={index} className="text-sm text-blue-700 dark:text-blue-400 flex items-center gap-2">
-                          <FaMapMarkerAlt className="text-xs" />
-                          {attraction}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-                    <h4 className="font-bold mb-3 text-green-800 dark:text-green-300">Cultural Context</h4>
-                    <p className="text-sm text-green-700 dark:text-green-400">
-                      This story represents authentic {selectedPost.category.toLowerCase()} traditions from {selectedPost.location?.state}. 
-                      Experience level: {selectedPost.difficulty}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {selectedPost.tags?.map((tag, index) => (
-                        <span key={index} className="bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-xs">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                  {selectedPost.content}
+                </p>
                 
                 <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                  <h4 className="font-bold mb-2">About this story:</h4>
+                  <h4 className="font-bold mb-2">About this content:</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     This cultural insight was shared by {selectedPost.author}. 
                     It represents authentic local knowledge and traditions passed down through generations.
-                    {userLocation && selectedPost.location && (
-                      ` This location is approximately ${calculateDistance(
-                        userLocation.latitude, userLocation.longitude,
-                        selectedPost.location.latitude, selectedPost.location.longitude
-                      ).toFixed(1)} km from your current location.`
-                    )}
                   </p>
                 </div>
               </div>
